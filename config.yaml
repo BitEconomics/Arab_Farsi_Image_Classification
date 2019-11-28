@@ -1,0 +1,140 @@
+data:
+  dataset: {name: Arab, samples: 60000, type: private}
+  datasetLoadOption: full
+  kfold: 1
+  mapping:
+    image:
+      options: {Augmentation: false, Height: 28, Normalization: false, Resize: true,
+        Scaling: 1, Width: 28, height_shift_range: 0, horizontal_flip: false, pretrained: None,
+        rotation_range: 0, shear_range: 0, vertical_flip: false, width_shift_range: 0}
+      port: InputPort0
+      shape: ''
+      type: Image
+    number:
+      options: {}
+      port: OutputPort0
+      shape: ''
+      type: Categorical
+  numPorts: 1
+  samples: {split: 1, test: 0, training: 48000, validation: 12000}
+  shuffle: true
+model:
+  connections:
+  - {source: activation_134, target: dropout_27}
+  - {source: convolution2d_231, target: convolution2d_232}
+  - {source: maxpooling2d_29, target: convolution2d_231}
+  - {source: batchnormalization_197, target: activation_134}
+  - {source: dropout_27, target: dense_62}
+  - {source: convolution2d_232, target: maxpooling2d_30}
+  - {source: convolution2d_230, target: maxpooling2d_29}
+  - {source: dense_61, target: batchnormalization_197}
+  - {source: dense_62, target: activation_135}
+  - {source: maxpooling2d_30, target: flatten}
+  - {source: convolution2d_229, target: convolution2d_230}
+  - {source: activation_133, target: dense_61}
+  - {source: activation_135, target: dense_63}
+  - {source: flatten, target: dense_60}
+  - {source: Input_0, target: convolution2d_229}
+  - {source: dense_60, target: activation_133}
+  - {source: dense_63, target: Output_0}
+  layers:
+  - args: {}
+    class: Input
+    name: Input_0
+    x: 60
+    y: 60
+  - args: {activation: relu, border_mode: same, dim_ordering: th, nb_col: 2, nb_filter: 64,
+      nb_row: 2}
+    class: Convolution2D
+    name: convolution2d_229
+    x: 60
+    y: 180
+  - args: {activation: linear, border_mode: same, dim_ordering: th, nb_col: 2, nb_filter: 64,
+      nb_row: 2}
+    class: Convolution2D
+    name: convolution2d_230
+    x: 60
+    y: 300
+  - args: {dim_ordering: th, strides: '(2, 2)'}
+    class: MaxPooling2D
+    name: maxpooling2d_29
+    x: 60
+    y: 420
+  - args: {activation: relu, border_mode: same, dim_ordering: th, nb_col: 2, nb_filter: 50,
+      nb_row: 2}
+    class: Convolution2D
+    name: convolution2d_231
+    x: 60
+    y: 540
+  - args: {activation: linear, border_mode: same, dim_ordering: th, nb_col: 2, nb_filter: 50,
+      nb_row: 2}
+    class: Convolution2D
+    name: convolution2d_232
+    x: 60
+    y: 660
+  - args: {dim_ordering: th, strides: '(2, 2)'}
+    class: MaxPooling2D
+    name: maxpooling2d_30
+    x: 410
+    y: 60
+  - args: {}
+    class: Flatten
+    name: flatten
+    x: 410
+    y: 180
+  - args: {activation: linear, output_dim: 2048}
+    class: Dense
+    name: dense_60
+    x: 410
+    y: 300
+  - args: {activation: relu}
+    class: Activation
+    name: activation_133
+    x: 410
+    y: 420
+  - args: {activation: linear, output_dim: 1024}
+    class: Dense
+    name: dense_61
+    x: 410
+    y: 540
+  - args: {}
+    class: BatchNormalization
+    name: batchnormalization_197
+    x: 410
+    y: 660
+  - args: {activation: relu}
+    class: Activation
+    name: activation_134
+    x: 760
+    y: 60
+  - args: {p: 0.4}
+    class: Dropout
+    name: dropout_27
+    x: 760
+    y: 180
+  - args: {activation: linear, output_dim: 1024}
+    class: Dense
+    name: dense_62
+    x: 760
+    y: 300
+  - args: {activation: relu}
+    class: Activation
+    name: activation_135
+    x: 760
+    y: 420
+  - args: {activation: softmax, output_dim: 10}
+    class: Dense
+    name: dense_63
+    x: 760
+    y: 540
+  - args: {}
+    class: Output
+    name: Output_0
+    x: 760
+    y: 660
+params:
+  batch_size: 32
+  loss_func: categorical_crossentropy
+  num_epoch: 10
+  optimizer: {name: Adadelta}
+project: aMNIST
